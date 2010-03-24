@@ -1,0 +1,36 @@
+ABOUT
+
+caGrid is a service-oriented platform that supports cutting-edge 
+collaborative e-Science by providing the tools for organizations to 
+integrate data silos, securely share data and compose analysis 
+pipelines. caGrid supports e-Science initiatives in basic, 
+translational, and clinical research. The focus of caGRID at the 
+moment is primarily cancer research, and publicly available data 
+offered by caGRID currently is concerned with proteins and genes and 
+experiments on proteins and genes as they relate to cancer.
+
+The modules in this package are dedicated to constructing, validating, 
+and sending CQL queries to caGRID, as CQL is the structured XML query 
+language used in caGRID.
+
+
+INSTALLATION
+
+For software requirements and installation details see the INSTALL file.
+
+
+Perl MODULE DOCUMENTATION
+
+ >perldoc caGRID::CQL1
+
+This will work if you've run 'make install'and Perl knows where to
+find caGRID::CQL1. Alternatively:
+
+ >perldoc lib/caGRID/CQL1.pm
+
+
+caGRID DOCUMENTATION
+
+http://cagrid.org
+
+

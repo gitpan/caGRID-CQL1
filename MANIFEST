@@ -1,0 +1,20 @@
+INSTALL
+lib/caGRID/CQL1.pm
+lib/caGRID/CQL1/Association.pm
+lib/caGRID/CQL1/Attribute.pm
+lib/caGRID/CQL1/Group.pm
+lib/caGRID/CQL1/Object.pm
+lib/caGRID/CQL1/QueryModifier.pm
+lib/caGRID/CQL1/Schema.pm
+lib/caGRID/CQL1/Validator.pm
+lib/caGRID/Transfer/Client.pm
+lib/caGRID/Net/Request.pm
+lib/caGRID/Net/Util.pm
+LICENSE
+Makefile.PL
+MANIFEST			This list of files
+README
+t/query.t
+t/transfer.t
+t/validate.t
+examples/GetPeptideFromPeptideAtlasService.pm

@@ -1,0 +1,43 @@
+Required Perl modules (available from CPAN)
+
+  * XML::Writer
+  * LWP::UserAgent
+  * HTTP::Request
+  * XML::LibXML::Reader
+  * URI
+  * Net::HTTP
+  * LWP::Simple
+
+
+Quick Install for Unix
+
+1. Install all the required Perl modules
+
+2. Type the following at a command line
+
+	tar -xvf caGRID-CQL1-X.X.X.tar 
+	cd caGRID-CQL1-X.X.X
+	perl Makefile.PL
+	make
+	make test
+	sudo make install
+
+
+Windows Installation
+
+Please see the instructions at http://search.cpan.org/~JHI/perl-5.8.0/pod/perlmodinstall.pod.
+
+Important: these modules do not require compilation.
+
+
+Module Versions
+
+This package has been tested with the following module versions:
+
+  * XML::Writer 0.606, 0.602
+  * LWP::UserAgent 5.833, 5.800
+  * HTTP::Request 5.827
+  * XML::LibXML::Reader 1.70, 1.64
+  * URI 1.40
+  * Net::HTTP 5.833
+  * LWP::Simple 5.827
