@@ -1,4 +1,4 @@
-# $Id: Util.pm 129 2010-03-24 14:21:18Z osborneb $
+# $Id: Util.pm 144 2010-03-27 19:12:06Z osborneb $
 package caGRID::Net::Util;
 
 =head1 NAME
@@ -126,9 +126,8 @@ caGRID::Transfer::Client, caGRID::CQL1.
 =cut
 
 use strict;
-use Exporter;
 use Net::HTTP;
-our @ISA = qw(Exporter);
+use base 'Exporter';
 our @EXPORT = qw(testHTTP);
 
 =head2 testHTTP

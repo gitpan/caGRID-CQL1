@@ -1,4 +1,4 @@
-# $Id: Association.pm 115 2010-03-22 15:49:31Z osborneb $
+# $Id: Association.pm 144 2010-03-27 19:12:06Z osborneb $
 package caGRID::CQL1::Association;
 
 =head1 NAME
@@ -131,8 +131,7 @@ caGRID::Transfer::Client, caGRID::CQL1.
 =cut
 
 use strict;
-use Exporter;
-our @ISA = qw(Exporter caGRID::CQL1::Object);
+our @ISA = qw(caGRID::CQL1::Object);
 
 =head2 new
 

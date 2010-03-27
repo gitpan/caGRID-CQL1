@@ -1,4 +1,4 @@
-# $Id: Group.pm 115 2010-03-22 15:49:31Z osborneb $
+# $Id: Group.pm 144 2010-03-27 19:12:06Z osborneb $
 package caGRID::CQL1::Group;
 
 =head1 NAME
@@ -131,8 +131,6 @@ caGRID::Transfer::Client, caGRID::CQL1.
 =cut
 
 use strict;
-require Exporter;
-our @ISA = qw(Exporter);
 
 our $_LOGIC_AND = "AND";
 our $_LOGIC_OR = "OR";

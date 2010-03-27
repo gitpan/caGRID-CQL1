@@ -1,9 +1,9 @@
-# $Id: CQL1.pm 135 2010-03-24 19:30:22Z osborneb $
+# $Id: CQL1.pm 144 2010-03-27 19:12:06Z osborneb $
 package caGRID::CQL1;
 
 =head1 NAME
 
-caGRID::CQL1 - Construct and send a CQL XML query.
+caGRID::CQL1 - Construct and send a CQL XML request
 
 =head1 SYNOPSIS
 
@@ -47,9 +47,9 @@ caGRID::CQL1 - Construct and send a CQL XML query.
   $mod->attributeNames("id");
   $mod->attributeNames("value");
 
-  # send the query, receive the data
+  # send the request, receive the data
   $cql = caGRID::CQL1->new;
-  $response = $cql->query($url, $obj, $mod);
+  $response = $cql->request($url, $obj, $mod);
 
 =head1 DESCRIPTION
 
@@ -181,14 +181,10 @@ caGRID::Transfer::Client, caGRID::CQL1.
 =cut
 
 use strict;
-require Exporter;
-our @ISA = qw(Exporter);
 use XML::Writer;
-use LWP::UserAgent;
-use HTTP::Request;
 use XML::LibXML::Reader;
 
-our $VERSION = 1.0;
+our $VERSION = 1.0.1;
 
 our $dataNS  = "http://gov.nih.nci.cagrid.data/DataService";
 our $queryNS = "http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery";
@@ -205,75 +201,65 @@ our %nss   = (
 
  Title   : new
  Usage   : 
- Function: 
+ Function: Create a caGRID::CQL1 object
  Example : my $obj = caGRID::CQL1->new()
  Returns : A caGRID::CQL1 object
- Args    : debug => 1: if debug is true, the requested XML is printed to console,
-           timeout => 5: timeout query if the request did not return in 5 seconds 
+ Args    : -debug => 1: if debug is true, the requested XML is printed to console,
+           -timeout => 5: timeout query if the request did not return in 5 seconds 
 =cut
 
 sub new {
-	my $that = shift;
-	my $class = ref($that) || $that;
+   my ($class,@args) = @_;
 
-	my $self = {@_};
+   my $self = {};
 
-	bless( $self, $class );
-	return $self;
+   bless $self, $class;
+   $self->_rearrange(@args);
+   return $self;
 }
 
-=head2 query
 
- Title   : query
+=head2 request
+
+ Title   : request
  Usage   :
- Function: Query the server. If the HTTP request fails this method dies with a
+ Function: Send the query the server. If the HTTP request fails this method dies with a
            HTTP error message	
  Example :
  Returns : SOAP XML from server
  Args    : 1st parameter: service URL, 2nd parameter: target object (instance of 
-           CQL1::Object), 3nd parameter: a Query modifier
+           CQL1::Object), optional 3nd parameter: a Query modifier
 
 =cut
 
-sub query {
+sub request {
 	my $self   = shift;
 	my $url    = shift;
 	my $target   = shift;
 	my $modifier = shift;
 
+	my $timeout;
+
 	my $xml = $self->toXML( $target, $modifier );
-	if ($self->{debug})
+	if ( $self->{debug} )
 	{
 	    print "-------------query--------------\n";
 	    print $xml;
 	    print "-------------end of query-------\n";
 	}
 	
-	my $SOAPaction = "http://data.cagrid.nci.nih.gov/DataService/QueryResponse";
-	my $userAgent; 
-	if ($self->{timeout})
-	{
-	    $userAgent= LWP::UserAgent->new( agent => 'cql perl client', timeout=>$self->{timeout} );
-	} else
-	{
-	    $userAgent= LWP::UserAgent->new( agent => 'cql perl client');
-	}
-	my $request  = HTTP::Request->new( POST => $url );
-	$request->content_type("text/xml; charset=utf-8");
-	$request->header( SOAPAction => $SOAPaction );
+	$timeout = $self->{timeout} if $self->{timeout};
 
-	$request->content($xml);
-	my $response = $userAgent->request($request);
-	dieOnError($response);
-	return $response->content();
+	my $response = caGRID::Net::Request::request($xml,$url,$timeout);
 
+	$response;
 }
 
 =head2 getResultCollection
 
  Title   : getResultCollection
  Usage   :
- Function: Position the parser position to CQLQueryResultCollection element
+ Function: Position the parser to the CQLQueryResultCollection element
            Die with error message if the CQLQueryResultCollection element can  
            not be found
  Example :
@@ -382,7 +368,7 @@ sub getAttributeResultAsHashRef
  Function: Return the all attributes for an XML element as a reference
  Example :
  Returns : Hash reference
- Args    : An instance of XML::LibXML::Reader positioned to an xml element
+ Args    : An instance of XML::LibXML::Reader positioned to an XML element
 
 =cut
 
@@ -642,31 +628,6 @@ sub printGroup {
 
 }
 
-=head2 dieOnError
-
- Title   : dieOnError
- Usage   :
- Function: Die if there is an error, with a message
- Example :
- Returns : Error string
- Args    :
-
-=cut
-
-sub dieOnError
-{
-	my $response = shift;
-	unless ( $response->is_success() ) {
-		if ($response->header("Content-Type") =~ /text\/xml/)
-		{
-			die extractFault($response->content());
-		} else
-		{
-			die $response->message();
-		}
-	}
-}
-
 =head2 extractFault
 
  Title   : extractFault
@@ -695,6 +656,27 @@ sub extractFault
     }
    }
   return "Unknown error";
+}
+
+=head2 _rearrange
+
+ Title   : _rearrange
+ Usage   :
+ Function: Initialize with arguments to new()
+ Example :
+ Returns : 
+ Args    : Optional, parameters with -
+
+=cut
+
+sub _rearrange {
+   my $self = shift;
+   my $key;
+
+   while( @_ ) {
+      ($key = shift) =~ s/\055//;
+      $self->{$key} = shift;
+   }
 }
 
 1;

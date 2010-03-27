@@ -1,4 +1,4 @@
-# $Id: Client.pm 113 2010-03-22 15:30:50Z osborneb $
+# $Id: Client.pm 144 2010-03-27 19:12:06Z osborneb $
 package caGRID::Transfer::Client;
 
 =head1 NAME
@@ -150,10 +150,6 @@ use XML::Writer;
 use XML::LibXML::Reader;
 use HTTP::Request::Common qw(:DEFAULT); 
 use URI; 
-require Exporter;
-our @ISA = qw(Exporter);
-
-our $VERSION = 1.0;
 
 =head2 new
 

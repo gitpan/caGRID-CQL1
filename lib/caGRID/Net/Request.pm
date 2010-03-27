@@ -1,4 +1,4 @@
-# $Id: Request.pm 115 2010-03-22 15:49:31Z osborneb $
+# $Id: Request.pm 144 2010-03-27 19:12:06Z osborneb $
 package caGRID::Net::Request;
 
 =head1 NAME
@@ -128,12 +128,76 @@ caGRID::Transfer::Client, caGRID::CQL1.
 =cut
 
 use strict;
-use Exporter;
-our @ISA = qw(Exporter);
+use base 'Exporter';
 our @EXPORT = qw( extractRequest );
 
 use XML::LibXML;
 use XML::LibXML::Reader;
+use LWP::UserAgent;
+use HTTP::Request;
+
+use constant SOAPACTION => 'http://data.cagrid.nci.nih.gov/DataService/QueryResponse';
+
+=head2 request
+
+ Title   : request
+ Usage   : 
+ Function: Constructs and sends the request
+ Example : $resp = request($xml)
+ Returns : The response
+ Args    : The SOAP message
+
+=cut
+
+sub request {
+	my ($xml,$url,$timeout) = @_;
+
+	my $userAgent; 
+
+	if ( $timeout )
+	{
+	    $userAgent= LWP::UserAgent->new( agent => 'cql perl client', 
+													 timeout => $timeout );
+	} else
+	{
+	    $userAgent= LWP::UserAgent->new( agent => 'cql perl client');
+	}
+
+	my $request  = HTTP::Request->new( POST => $url );
+	$request->content_type("text/xml; charset=utf-8");
+	$request->header( SOAPAction => SOAPACTION );
+
+	$request->content($xml);
+	my $response = $userAgent->request($request);
+	dieOnError($response);
+	return $response->content();
+
+}
+
+=head2 dieOnError
+
+ Title   : dieOnError
+ Usage   :
+ Function: Die if there is an error, with a message
+ Example :
+ Returns : Error string
+ Args    :
+
+=cut
+
+sub dieOnError
+{
+	my $response = shift;
+	unless ( $response->is_success() ) {
+		if ($response->header("Content-Type") =~ /text\/xml/)
+		{
+			die extractFault($response->content());
+		} else
+		{
+			die $response->message();
+		}
+	}
+}
 
 =head2 extractRequest
 

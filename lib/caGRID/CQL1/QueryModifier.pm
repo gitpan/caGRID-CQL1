@@ -1,4 +1,4 @@
-# $Id: QueryModifier.pm 115 2010-03-22 15:49:31Z osborneb $
+# $Id: QueryModifier.pm 144 2010-03-27 19:12:06Z osborneb $
 package caGRID::CQL1::QueryModifier;
 
 =head1 NAME
@@ -127,8 +127,6 @@ caGRID::Transfer::Client, caGRID::CQL1.
 =cut
 
 use strict;
-require Exporter;
-our @ISA = qw(Exporter);
 
 my $property;
 

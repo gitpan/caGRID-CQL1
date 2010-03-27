@@ -1,5 +1,5 @@
 #-*-Perl-*-
-# $Id: query.t 130 2010-03-24 14:23:09Z osborneb $
+# $Id: query.t 144 2010-03-27 19:12:06Z osborneb $
 
 use strict;
 use lib "./lib";
@@ -35,7 +35,7 @@ $host = 'cabiogrid40.nci.nih.gov';
 $url = "http://$host:80/wsrf/services/cagrid/CaBIO40GridSvc";
 
 #-------------association query, distinct attribute modifier
-$obj = caGRID::CQL1::Object->new();
+$obj = caGRID::CQL1::Object->new;
 $obj->name("gov.nih.nci.cabio.domain.Gene");
 
 $assoc = caGRID::CQL1::Association->new();
@@ -73,7 +73,7 @@ is('caGRID::CQL1::Attribute', ref($ref),"attribute() sets correctly");
 $mod = caGRID::CQL1::QueryModifier->new();
 $mod->distinctAttribute('symbol');
 
-$cql = caGRID::CQL1->new();    
+$cql = caGRID::CQL1->new(-debug => 1);    
 
 $xml = $cql->toXML($obj, $mod);
 $xml = extractRequest($xml);
@@ -85,7 +85,7 @@ $http_result = testHTTP($host);
 SKIP: {
 	skip "Can not connect to server $host for testing", 1 if ! $http_result;
 
-	$response = $cql->query($url, $obj, $mod);
+	$response = $cql->request($url, $obj, $mod);
 
 	$reader = XML::LibXML::Reader->new(string => $response);
 	$reader = $cql->getResultCollection($reader);
@@ -136,7 +136,7 @@ $http_result = testHTTP($host);
 SKIP: {
 	skip "Can not connect to server $host for testing", 1 if ! $http_result;
 
-	$response = $cql->query($url, $obj, $mod);
+	$response = $cql->request($url, $obj, $mod);
 
 	$reader = XML::LibXML::Reader->new(string => $response);
 	$result = $cql->getResultCollection($reader);
@@ -176,7 +176,7 @@ SKIP: {
 	#-------------------test
 	is(1, validateQueryXml($xml),"validate 1st GridPIR query");
 
-	$response = $cql->query($url, $obj, $mod);
+	$response = $cql->request($url, $obj, $mod);
 
 	$reader = XML::LibXML::Reader->new(string => $response);
 	$result = $cql->getResultCollection($reader);
@@ -223,7 +223,7 @@ SKIP: {
 	#-------------------test
 	is(1, validateQueryXml($xml),"validate 2nd GridPIR query");
 
-	$response = $cql->query($url, $obj, $mod);
+	$response = $cql->request($url, $obj, $mod);
 
 	$reader = XML::LibXML::Reader->new(string => $response);
 	$reader = $cql->getResultCollection($reader);
@@ -267,7 +267,7 @@ SKIP: {
 	#-------------------test
 	is(1, validateQueryXml($xml),"validate 3rd GridPIR query");
 
-	$response = $cql->query($url, $obj, $mod);
+	$response = $cql->request($url, $obj, $mod);
 
 	$reader = XML::LibXML::Reader->new(string => $response);
 	$reader = $cql->getResultCollection($reader);
@@ -303,7 +303,7 @@ SKIP: {
 	#-------------------test
 	is(1, validateQueryXml($xml),"validate 4th GridPIR query");
 
-	$response = $cql->query($url, $obj);
+	$response = $cql->request($url, $obj);
 
 	$reader = XML::LibXML::Reader->new(string => $response);
 	$reader = $cql->getResultCollection($reader);
@@ -373,7 +373,7 @@ $http_result = testHTTP($host);
 SKIP: {
 	skip "Can not connect to server $host for testing", 1 if ! $http_result;
 
-	$response = $cql->query($url, $obj, $mod);
+	$response = $cql->request($url, $obj, $mod);
 
 	$reader = XML::LibXML::Reader->new(string => $response);
 	$reader = $cql->getResultCollection($reader);
@@ -430,7 +430,7 @@ $http_result = testHTTP($host);
 SKIP: {
 	skip "Can not connect to server $host for testing", 1 if ! $http_result;
 
-	$response = $cql->query($url, $obj, $mod);
+	$response = $cql->request($url, $obj, $mod);
 
 	$reader = XML::LibXML::Reader->new(string => $response);
 	$result = $cql->getResultCollection($reader);
@@ -443,5 +443,3 @@ SKIP: {
 }
 
 __END__
-
-

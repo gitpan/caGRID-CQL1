@@ -9,7 +9,7 @@ Required Perl modules (available from CPAN)
   * LWP::Simple
 
 
-Quick Install for Unix
+Quick Install for Unix and Cygwin
 
 1. Install all the required Perl modules
 
@@ -27,7 +27,7 @@ Windows Installation
 
 Please see the instructions at http://search.cpan.org/~JHI/perl-5.8.0/pod/perlmodinstall.pod.
 
-Important: these modules do not require compilation.
+Important: the caGRID-CQL1 modules do not require compilation.
 
 
 Module Versions
