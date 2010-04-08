@@ -1,4 +1,4 @@
-# $Id: Client.pm 144 2010-03-27 19:12:06Z osborneb $
+# $Id: Client.pm 147 2010-03-27 19:32:59Z osborneb $
 package caGRID::Transfer::Client;
 
 =head1 NAME
@@ -179,6 +179,7 @@ our $transferNS = "http://transfer.cagrid.org/TransferService/Context";
 our $tdataNS = "http://transfer.cagrid.org/Transfer";
 our $wsaNS = "http://schemas.xmlsoap.org/ws/2004/03/addressing";
 our $resNS = "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd";
+
 our %nss = (
 	$soapNS => "soap",
 	$transferNS => "t",
@@ -326,7 +327,6 @@ sub uploadFile
 	return 1;
 		
 }
-
 
 =head2 setStatus
 

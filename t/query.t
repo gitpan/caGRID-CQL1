@@ -1,5 +1,5 @@
 #-*-Perl-*-
-# $Id: query.t 144 2010-03-27 19:12:06Z osborneb $
+# $Id: query.t 149 2010-03-28 15:58:26Z osborneb $
 
 use strict;
 use lib "./lib";
@@ -9,7 +9,7 @@ BEGIN: {
 	if ( $@ ) {
 		use lib 't/lib';
 	}
-	use Test::More tests => 34;
+	use Test::More tests => 35;
 
 	use_ok('caGRID::CQL1::Attribute');
 	use_ok('caGRID::CQL1::Object');
@@ -73,7 +73,7 @@ is('caGRID::CQL1::Attribute', ref($ref),"attribute() sets correctly");
 $mod = caGRID::CQL1::QueryModifier->new();
 $mod->distinctAttribute('symbol');
 
-$cql = caGRID::CQL1->new(-debug => 1);    
+$cql = caGRID::CQL1->new();    
 
 $xml = $cql->toXML($obj, $mod);
 $xml = extractRequest($xml);
@@ -124,7 +124,7 @@ $obj->attribute($attr);
 $mod = caGRID::CQL1::QueryModifier->new();
 $mod->distinctAttribute('length');
 
-$cql = caGRID::CQL1->new(-debug => 1);    
+$cql = caGRID::CQL1->new();    
 
 $xml = $cql->toXML($obj, $mod);
 $xml = extractRequest($xml);
@@ -441,5 +441,13 @@ SKIP: {
 	cmp_ok($count,'>', 100, "caArray query and count query modifier");
 
 }
+
+#-------------set proxy
+my @proxy = ('http','http://proxy.sn.no:8001/');
+$cql = caGRID::CQL1->new(-proxy => \@proxy);    
+
+#-------------------test 
+is('http://proxy.sn.no:8001/', $proxy[1], "-proxy sets correctly");
+
 
 __END__

@@ -1,9 +1,9 @@
-# $Id: CQL1.pm 144 2010-03-27 19:12:06Z osborneb $
+# $Id: CQL1.pm 149 2010-03-28 15:58:26Z osborneb $
 package caGRID::CQL1;
 
 =head1 NAME
 
-caGRID::CQL1 - Construct and send a CQL XML request
+caGRID::CQL1 - Construct a CQL XML request
 
 =head1 SYNOPSIS
 
@@ -184,7 +184,7 @@ use strict;
 use XML::Writer;
 use XML::LibXML::Reader;
 
-our $VERSION = 1.0.1;
+our $VERSION = 1.0.2;
 
 our $dataNS  = "http://gov.nih.nci.cagrid.data/DataService";
 our $queryNS = "http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery";
@@ -202,10 +202,13 @@ our %nss   = (
  Title   : new
  Usage   : 
  Function: Create a caGRID::CQL1 object
- Example : my $obj = caGRID::CQL1->new()
+ Example : $obj = caGRID::CQL1->new() or
+           @proxy = ('http','http://proxy.sn.no:8001/');
+           $cql = caGRID::CQL1->new(-proxy => \@proxy);    
  Returns : A caGRID::CQL1 object
  Args    : -debug => 1: if debug is true, the requested XML is printed to console,
-           -timeout => 5: timeout query if the request did not return in 5 seconds 
+           -timeout => 5: timeout query if the request did not return in 5 seconds,
+           -proxy => $proxy
 =cut
 
 sub new {
@@ -233,24 +236,18 @@ sub new {
 =cut
 
 sub request {
-	my $self   = shift;
-	my $url    = shift;
-	my $target   = shift;
-	my $modifier = shift;
-
-	my $timeout;
+	my ($self,$url,$target,$modifier) = @_;
 
 	my $xml = $self->toXML( $target, $modifier );
+
 	if ( $self->{debug} )
 	{
 	    print "-------------query--------------\n";
 	    print $xml;
 	    print "-------------end of query-------\n";
 	}
-	
-	$timeout = $self->{timeout} if $self->{timeout};
 
-	my $response = caGRID::Net::Request::request($xml,$url,$timeout);
+	my $response = caGRID::Net::Request::request($self,$xml,$url);
 
 	$response;
 }

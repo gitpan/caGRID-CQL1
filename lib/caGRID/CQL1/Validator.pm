@@ -3,7 +3,7 @@ package caGRID::CQL1::Validator;
 
 =head1 NAME
 
-caGRID::CQL1::Validator - Useful utility methods
+caGRID::CQL1::Validator - Validate CQL against the schema
 
 =head1 DESCRIPTION
 

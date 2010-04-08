@@ -1,9 +1,9 @@
-# $Id: Request.pm 144 2010-03-27 19:12:06Z osborneb $
+# $Id: Request.pm 149 2010-03-28 15:58:26Z osborneb $
 package caGRID::Net::Request;
 
 =head1 NAME
 
-caGRID::Net::Request - parser methods
+caGRID::Net::Request - Send HTTP Requests
 
 =head1 DESCRIPTION
 
@@ -128,7 +128,9 @@ caGRID::Transfer::Client, caGRID::CQL1.
 =cut
 
 use strict;
-use base 'Exporter';
+use Exporter;
+use caGRID::CQL1;
+our @ISA = qw ( Exporter caGRID::CQL1 );
 our @EXPORT = qw( extractRequest );
 
 use XML::LibXML;
@@ -150,18 +152,13 @@ use constant SOAPACTION => 'http://data.cagrid.nci.nih.gov/DataService/QueryResp
 =cut
 
 sub request {
-	my ($xml,$url,$timeout) = @_;
+	my ($self,$xml,$url) = @_;
 
-	my $userAgent; 
+	my $userAgent = LWP::UserAgent->new( agent => 'cql perl client');
 
-	if ( $timeout )
-	{
-	    $userAgent= LWP::UserAgent->new( agent => 'cql perl client', 
-													 timeout => $timeout );
-	} else
-	{
-	    $userAgent= LWP::UserAgent->new( agent => 'cql perl client');
-	}
+	$userAgent->timeout($self->{timeout}) if ( $self->{timeout} );
+
+	$userAgent->proxy($self->{proxy}->[0],$self->{proxy}->[1]) if $self->{proxy};
 
 	my $request  = HTTP::Request->new( POST => $url );
 	$request->content_type("text/xml; charset=utf-8");

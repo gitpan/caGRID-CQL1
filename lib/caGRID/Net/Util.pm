@@ -3,7 +3,7 @@ package caGRID::Net::Util;
 
 =head1 NAME
 
-caGRID::Net::Util - Useful utility methods
+caGRID::Net::Util - Utility methods
 
 =head1 DESCRIPTION
 
